@@ -1,34 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <style>
-    /* Prevents the carousel from blowing up the layout */
-    .carousel-container {
-      overflow: hidden;
-      width: 100%;
-      position: relative;
-    }
-    
-    #gazebo-carousel img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    /* Moves the arrows so they don't overlap your text too much */
-    .carousel-navigation-prev, .carousel-navigation-next {
-      opacity: 0.7;
-    }
-  </style>
-
   <meta charset="utf-8">
-  <meta name="description"
-        content="Perception-Aware Safe Control for 3D Leader-Follower UAV Formation via CBF.">
-  <meta name="keywords" content="UAV, Formation Control, Control Barrier Functions, Perception-Aware, 3D-LFF">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Perception-Aware Safe Control for 3D-LFF</title>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Distributed 3D Leader-Follower Formation Control with Field-of-View Safety via CBFs">
+  <meta name="description" content="A distributed perception-aware 3D leader-follower formation control framework that uses a CBF-QP safety filter to keep the leader inside the follower's camera FOV at all times.">
+  <meta name="keywords" content="Multi-UAV systems, distributed control, 3D leader-follower formation, field-of-view constraints, control barrier functions, CBF-QP, perception-aware control, Crazyflie">
+  <meta name="author" content="Immanuel R. Santjoko, Richie R. Suganda, Miao Pan, Bin Hu">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="NAIL Lab — University of Houston">
+  <meta property="og:title" content="Distributed 3D Leader-Follower Formation Control with Field-of-View Safety via CBFs">
+  <meta property="og:description" content="A distributed perception-aware 3D leader-follower formation control framework that uses a CBF-QP safety filter to keep the leader inside the follower's camera FOV at all times.">
+  <meta property="og:url" content="https://research.noelsadventure.my.id/">
+  <meta property="og:image" content="https://research.noelsadventure.my.id/static/images/intro2.png">
+  <meta property="og:image:alt" content="Perception-aware leader-follower safe control: baseline vs proposed method">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="Control Barrier Functions">
+  <meta property="article:tag" content="Multi-UAV Formation Control">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Distributed 3D Leader-Follower Formation Control with FOV Safety via CBFs">
+  <meta name="twitter:description" content="Perception-aware safe 3D-LFF control: a CBF-QP filter that keeps the leader inside the follower's camera frustum during aggressive maneuvers.">
+  <meta name="twitter:image" content="https://research.noelsadventure.my.id/static/images/intro2.png">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="Distributed 3D Leader-Follower Formation Control with Field-of-View Safety via Control Barrier Functions">
+  <meta name="citation_author" content="Santjoko, Immanuel R.">
+  <meta name="citation_author" content="Suganda, Richie R.">
+  <meta name="citation_author" content="Pan, Miao">
+  <meta name="citation_author" content="Hu, Bin">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_pdf_url" content="https://research.noelsadventure.my.id/static/pdfs/paper.pdf">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>Distributed 3D Leader-Follower Formation Control with FOV Safety via CBFs</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="static/images/icon.png">
+  <link rel="apple-touch-icon" href="static/images/icon.png">
+
+  <!-- Google Analytics (preserved from previous site) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -37,337 +66,430 @@
     gtag('config', 'G-PYVRSFMDRL');
   </script>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
-  <!-- MathJax for Paper Equations -->
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <!-- Non-critical CSS -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Scripts -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "Distributed 3D Leader-Follower Formation Control with Field-of-View Safety via Control Barrier Functions",
+    "description": "A distributed perception-aware 3D leader-follower formation control framework that uses a CBF-QP safety filter to keep the leader inside the follower's camera FOV at all times.",
+    "author": [
+      { "@type": "Person", "name": "Immanuel R. Santjoko", "url": "https://noelsadventure.my.id",
+        "affiliation": { "@type": "Organization", "name": "Department of Electrical and Computer Engineering, University of Houston" } },
+      { "@type": "Person", "name": "Richie R. Suganda", "url": "https://www.linkedin.com/in/richie-ryulie-585609237/",
+        "affiliation": { "@type": "Organization", "name": "Department of Electrical and Computer Engineering, University of Houston" } },
+      { "@type": "Person", "name": "Miao Pan", "url": "https://scholar.google.com/citations?user=zwh0osAAAAAJ&hl=en",
+        "affiliation": { "@type": "Organization", "name": "Department of Electrical and Computer Engineering, University of Houston" } },
+      { "@type": "Person", "name": "Bin Hu", "url": "https://binhu85.github.io/",
+        "affiliation": { "@type": "Organization", "name": "University of Houston" } }
+    ],
+    "datePublished": "2026",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Under Review"
+    },
+    "url": "https://research.noelsadventure.my.id/",
+    "image": "https://research.noelsadventure.my.id/static/images/intro2.png",
+    "keywords": ["multi-UAV systems", "distributed control", "control barrier functions", "perception-aware control", "leader-follower formation"],
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/"
+  }
+  </script>
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div class="navbar-menu">
-    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <a class="navbar-item" href="https://noelsadventure.my.id">
-      <span class="icon"><i class="fas fa-home"></i></span>
-      </a>
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
 
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">More Research</a>
-        <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://perceptionawarefollower.netlify.app/">Perception Aware Follower</a>
-          <a class="navbar-item" href="https://nail-uh.github.io/StewartPlatformSafeControl.github.io/">Stewart Platform</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
+  <main id="main-content">
 
-<section class="hero">
-  <div class="hero-body">
+  <!-- Title / authors / links -->
+  <section class="section">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Perception-Aware Safe Control for 3D Leader-Follower UAV Formation via CBF</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><a href="https://noelsadventure.my.id">Immanuel R.  Santjoko</a><sup>1†</sup>,</span>
-            <span class="author-block"><a href="https://www.linkedin.com/in/richie-ryulie-585609237/">Richie R. Suganda</a><sup>1†</sup>,</span>
-            <span class="author-block"><a href="https://https://binhu85.github.io/">Bin Hu</a><sup>1,2</sup></span>
-          </div>
+          <h1 class="title is-1 publication-title">Distributed 3D Leader-Follower Formation Control with Field-of-View Safety via Control Barrier Functions</h1>
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>Department of Electrical and Computer Engineering, University of Houston</span>
-            <span class="author-block"><sup>2</sup>Department of Engineering Technology, University of Houston</span>
-          </div>
-          <div class="is-size-6"><sup>†</sup>The authors contributed equally to this work.</div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://noelsadventure.my.id" target="_blank" rel="noopener noreferrer">Immanuel R. Santjoko</a><sup>1&dagger;</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/richie-ryulie-585609237/" target="_blank" rel="noopener noreferrer">Richie R. Suganda</a><sup>1&dagger;</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=zwh0osAAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Miao Pan</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://binhu85.github.io/" target="_blank" rel="noopener noreferrer">Bin Hu</a><sup>1,2</sup>
+              </span>
+            </div>
 
-          
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/nerfies"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Department of Electrical and Computer Engineering, University of Houston</span>
+              <span class="author-block"><sup>2</sup>Department of Engineering Technology, University of Houston</span>
+            </div>
+            <div class="is-size-6 eql-cntrb"><sup>&dagger;</sup>Equal contribution.</div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="static/pdfs/paper.pdf" target="_blank" rel="noopener noreferrer"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
                   </a>
-              </span>
+                </span>
+                <span class="link-block">
+                  <a href="#"
+                     class="external-link button is-normal is-rounded is-dark"
+                     title="arXiv link will be added once the paper is public">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#"
+                     class="external-link button is-normal is-rounded is-dark"
+                     title="Code repository will be released after review">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <!-- Teaser YouTube video -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-video">
+            <iframe src="https://www.youtube.com/embed/cK3tFkGduiA?rel=0&amp;showinfo=0"
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+          <h2 class="subtitle has-text-centered">
+            Demonstration of the proposed perception-aware safe control framework: the follower autonomously maintains the leader within its camera Field-of-View (FOV) despite conflicting formation commands.
+          </h2>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-
-
-
-<!-- Teaser Photo: Fig 1 from your paper -->
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <!-- Paper video. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">]
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-        <h2 class="subtitle has-text-centered">
-        A novel safety filter that encodes camera frustum constraints (FOV and depth) to ensure continuous visual relative localization in 3D UAV formations.
-        </h2>
-      </div>
-    </div>
-    <!--/ Paper video. -->
-  </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            This paper proposes a novel perception-aware safe distributed leader–follower formation control for a multi-UAV system in which each follower relies on a body-fixed camera with a limited field-of-view (FOV). A fundamental challenge is that visual estimation fails when the leader is outside the visible region, which can destabilize formation behaviors. 
-          </p>
-          <p>
-            To address this, we derive a leader–follower formation kinematic abstraction in spherical coordinates and design a nominal formation controller via state-feedback linearization. To guarantee continuous visibility, we incorporate a Control Barrier Function (CBF)–based quadratic program as a real-time safety filter that computes minimally modified safe velocity commands. The proposed method is validated through Gazebo simulations and hardware experiments, demonstrating accurate formation tracking while maintaining perception safety.
-          </p>
+  <!-- Abstract -->
+  <section class="section is-light-bg">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              This letter proposes a distributed 3D leader-follower formation (3D-LFF) control framework for multi-UAV systems that achieves formation tracking while enforcing perception safety constraints. Maintaining safe, vision-based 3D-LFF is challenging because onboard cameras impose strict Field-of-View (FOV) limitations, and demanding formation commands can drive the leader outside the follower's camera frustum, resulting in loss of visibility. To address this issue, we develop a perception-aware safe control architecture that guarantees visibility by construction. First, we derive a relative kinematic model in a line-of-sight coordinate representation and design a distributed 3D-LFF tracking controller using only locally available relative states. Next, we embed the nominal formation controller within a Control Barrier Function-based Quadratic Program (CBF-QP) safety filter that minimally modifies the commanded velocities to maintain the leader inside the follower's camera frustum while preserving formation tracking whenever feasible. Gazebo simulations and <a href="https://www.bitcraze.io/products/crazyflie-2-1-brushless/" target="_blank" rel="noopener noreferrer">Crazyflie</a> hardware experiments validate the proposed approach, demonstrating accurate formation tracking and effective FOV enforcement, including scenarios in which the nominal desired formation conflicts with visibility constraints.
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- System Framework & Problem Formulation -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">System Framework & Problem Formulation</h2>
-        <div class="content has-text-justified">
-          <p>
-            We define the 3D leader-follower formation (3D-LFF) state in an augmented spherical coordinate representation: \( \mathbf{x}_{ij} = [L_{ij}, \phi_{ij}, \xi_{ij}, \alpha_{ij}]^\top \).
-          </p>
+  <!-- Introduction and System Formulation -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 has-text-centered">Introduction and System Formulation</h2>
+
+          <div class="has-text-centered" style="margin-top: 20px; margin-bottom: 30px;">
+            <img src="static/images/intro2.png" alt="Perception-aware leader-follower safe control: comparison between baseline and proposed method" loading="lazy" style="max-width: 65%;">
+            <p class="figure-caption"><em>Perception-aware leader-follower safe control. Without perception constraints, the baseline follower (NoCBF, red) loses sight of the leader during maneuvers. In contrast, the proposed CBF-equipped follower (CBF, blue) actively modifies its commanded velocities to ensure the leader remains strictly within its camera's FOV.</em></p>
+          </div>
+
+          <div class="content has-text-justified">
+            <p>
+              In multi-UAV systems operating in GPS-denied environments, formation performance depends critically on the follower's ability to estimate the leader's relative state using onboard sensing. This introduces an intrinsic perception constraint: the leader must remain inside the follower's camera frustum to maintain continuous visibility and avoid degradation or loss of relative-state estimation. Failure to maintain this condition creates a direct conflict between formation objectives and sensing limitations.
+            </p>
+            <p>
+              Our framework models the underlying geometry using a <strong>3D line-of-sight coordinate representation</strong>, capturing the camera-to-leader distance, azimuth, and elevation angles, along with the relative heading. This representation enables the camera's Field-of-View (FOV) limits and depth range to be expressed as a well-defined perception safe set, and provides the geometric foundation for both the distributed tracking controller and the safety filter.
+            </p>
+          </div>
+
           <div class="has-text-centered" style="margin-top: 20px; margin-bottom: 20px;">
-            <img src="./static/images/diagram.png" alt="Leader-follower geometry and camera frustum" style="max-width: 50%;">
+            <img src="static/images/diagrammmm.png" alt="Leader-follower geometry and camera frustum" loading="lazy" style="max-width: 50%;">
+            <p class="figure-caption"><em>System geometry. The leader's position relative to the follower's camera is expressed in spherical coordinates (distance, azimuth, elevation) and augmented with the relative heading. The magenta region depicts the camera frustum defined by depth bounds and FOV angles.</em></p>
           </div>
-          <p>
-            The perception safe set \( \mathcal{S}^q \) is defined by the camera frustum inequalities, ensuring the leader remains within horizontal (\( \Phi \)) and vertical (\( \Theta \)) FOV angles, as well as depth limits (\( x_{near}, x_{far} \)).
-          </p>
-          <p>
-            <strong>Problem Formulation:</strong> This captures a fundamental trade-off. The control objective is to design a control law for the follower such that:
-          </p>
-          <ul>
-            <li>The formation error \( \mathbf{e}^\mathbf{x}_{ij} \) exponentially converges to \( \mathbf{0} \) when safety constraints are inactive.</li>
-            <li>The leader remains strictly within the follower's camera frustum for all \( t \ge 0 \).</li>
-          </ul>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Methodology & Architecture -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Methodology</h2>
-        <div class="content has-text-justified">
-          <p>
-            To resolve the conflicting objectives between tracking and visibility in real-time, we couple a nominal 3D-LFF controller with a CBF-QP safety filter. 
-          </p>
-          <div class="has-text-centered" style="margin-top: 20px; margin-bottom: 20px;">
-            <img src="./static/images/architecture4.png" alt="Perception-Aware Safe LFF Control Architecture" style="max-width: 100%;">
-          </div>
-          <p>
-            The desired formation is tracked by the distributed nominal controller based on the 3D-LFF kinematics using state-feedback linearization to produce the nominal velocity command \( \mathbf{u}_i^{nom} \). To guarantee perception safety, this nominal command is passed through a CBF-QP safety filter. The filter solves a quadratic program to produce a minimally modified safe command \( \mathbf{u}_i^{safe} \), actively enforcing the frustum constraints only when visibility is at risk.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">Experimental Videos</h2>
-    <div class="columns is-centered">
-      
-      <div class="column">
-        <div class="content">
-          <h3 class="title is-4">Gazebo Simulation</h3>
-          <p>Confined cave scenario with conflicting formation objectives.</p>
-          <div class="carousel-container">
-            <div id="gazebo-video-carousel" class="carousel">
-              <div class="item">
-                <video autoplay controls muted loop playsinline width="100%">
-                  <source src="./static/videos/Simulation-compressed-low.mp4" type="video/mp4">
-                </video>
-                <p class="has-text-centered is-size-7 mt-2">Conflicting Objectives</p>
-              </div>
-              <div class="item">
-                <video autoplay controls muted loop playsinline width="100%">
-                  <source src="./static/videos/Experiment-compressed-low.mp4" type="video/mp4">
-                </video>
-                <p class="has-text-centered is-size-7 mt-2">Abrupt Leader Motion</p>
+  <!-- Key Contributions -->
+  <section class="section is-light-bg">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 has-text-centered">Key Contributions</h2>
+          <div class="columns is-centered mt-4">
+            <div class="column is-one-third">
+              <div class="box has-text-centered" style="height: 100%;">
+                <span class="icon is-large has-text-info">
+                  <i class="fas fa-cube fa-2x"></i>
+                </span>
+                <h4 class="title is-5 mt-3">3D Kinematic Model &amp; Control</h4>
+                <p class="is-size-6">
+                  A relative 3D kinematic model in spherical coordinates that yields a 3D leader-follower formation (3D-LFF) control law relying on local relative measurements and distributed leader states.
+                </p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="column">
-        <div class="content">
-          <h3 class="title is-4">Hardware Experiment</h3>
-          <p>Real-world flight validation using Crazyflie 2.1 brushless UAVs.</p>
-          <div class="carousel-container">
-            <div id="hardware-video-carousel" class="carousel">
-              <div class="item">
-                <video autoplay controls muted loop playsinline width="100%">
-                  <source src="./static/videos/Experiment-compressed-low.mp4" type="video/mp4">
-                </video>
-                <p class="has-text-centered is-size-7 mt-2">Flight Validation - Test 1</p>
+            <div class="column is-one-third">
+              <div class="box has-text-centered" style="height: 100%;">
+                <span class="icon is-large has-text-info">
+                  <i class="fas fa-shield-alt fa-2x"></i>
+                </span>
+                <h4 class="title is-5 mt-3">Real-Time Safety Filter</h4>
+                <p class="is-size-6">
+                  A real-time CBF-QP safety filter that enforces the follower's camera frustum limits by minimally modifying the nominal formation commands, thereby guaranteeing continuous visibility while preserving tracking whenever feasible.
+                </p>
+              </div>
+            </div>
+            <div class="column is-one-third">
+              <div class="box has-text-centered" style="height: 100%;">
+                <span class="icon is-large has-text-info">
+                  <i class="fas fa-check-circle fa-2x"></i>
+                </span>
+                <h4 class="title is-5 mt-3">Experimental Validation</h4>
+                <p class="is-size-6">
+                  Validation in Gazebo simulations and Crazyflie hardware experiments, demonstrating reliable formation tracking and strict FOV enforcement, including scenarios where the desired formation is incompatible with visibility constraints.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Replace the old slider links with these -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
-<script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">Quantitative Results</h2>
-    <div class="columns is-centered">
-      
-      <div class="column is-half">
-        <h3 class="title is-4">Gazebo Simulation</h3>
-        
-        <!-- Add a wrapper to contain the width -->
-        <div class="carousel-container">
-          <div id="gazebo-carousel" class="carousel">
-            <div class="item">
-              <img src="./static/images/crazysim_conflicting.png" alt="Gazebo Conflicting" />
-              <p class="has-text-centered is-size-7">Three-Stages Task</p>
+  <!-- Methodology -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 has-text-centered">Methodology</h2>
+          <div class="content has-text-justified">
+            <div class="has-text-centered" style="margin-top: 20px; margin-bottom: 20px;">
+              <img src="static/images/architecture4.png" alt="Perception-Aware Safe Leader-Follower Control Architecture" loading="lazy" style="max-width: 100%;">
+              <p class="figure-caption"><em>Perception-aware safe 3D-LFF control architecture. A high-level distributed 3D-LFF controller tracks the desired state \( \mathbf{x}_{ij}^{d}(t) \) to generate the nominal command \( \mathbf{u}_{i}^{\mathrm{nom}} \). A perception-aware safety filter modifies \( \mathbf{u}_{i}^{\mathrm{nom}} \) to enforce visibility constraints \( \Gamma_c \) via a CBF-QP, outputting the safe command \( \mathbf{u}_{i}^{\mathrm{safe}} \) that keeps the leader inside the perception safe set \( \mathcal{S}_{ij}^{\mathbf{q}} \). A low-level velocity controller then tracks \( \mathbf{u}_{i}^{\mathrm{safe}} \) for the full quadrotor dynamics.</em></p>
             </div>
-            <div class="item">
-              <img src="./static/images/crazysim_abrupt.png" alt="Gazebo Abrupt" />
-              <p class="has-text-centered is-size-7">Abrupt Leader Motion</p>
-            </div>
-          </div>
-        </div>
-      </div>     
-      <div class="column is-half">
-        <h3 class="title is-4">Hardware Experiment</h3>
-        <div class="carousel-container">
-          <div id="hardware-image-carousel" class="carousel"> 
-            <div class="item">
-              <img src="./static/images/exp_conflict.png" alt="Experiment Conflicting" />
-              <p class="has-text-centered is-size-7">Three-Stages Task</p>
-            </div>
+            <p>
+              The proposed perception-aware safe 3D-LFF control framework employs a hierarchical architecture: an outer loop generates safe velocity commands, which are subsequently tracked by an inner-loop velocity controller handling the full-order system dynamics. This outer loop utilizes a cascaded two-stage design. First, a nominal formation controller is designed based on the relative 3D-LFF kinematics to track the desired formation, generating a nominal velocity command. To guarantee perception safety, this nominal velocity command is subsequently processed through a CBF-QP safety filter, which computes a minimally modified safe velocity command that ensures the forward invariance of the perception safe set while deviating minimally from the tracking objective.
+            </p>
           </div>
         </div>
       </div>
     </div>
-    
-    <p class="is-size-7 mt-4">
-      <strong>Comparison:</strong> The CBF-equipped follower (blue) maintains states within safe bounds compared to the unconstrained (NoCBF) baseline.
-    </p>
-  </div>
-</section>
+  </section>
 
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
-}</code></pre>
-  </div>
-</section>
+  <!-- Experiments -->
+  <section class="section is-light-bg" id="experiments">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Experiments</h2>
+      <p class="content">
+        The proposed framework is evaluated on three platforms: a Python-based numerical simulation, a Gazebo simulator, and a physical hardware platform using the Crazyflie 2.1 quadrotor. For a direct comparative analysis, the multi-robot system comprises one leader and two followers: one without the safety filter (<strong>NoCBF</strong>), and the other with the safety filter (<strong>CBF</strong>).
+      </p>
 
-<footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <p>
-        Research supported by the University of Houston. Website template adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+      <p class="content">
+        To analyze the effectiveness of the safety filter, the evaluation task is divided into a <strong>three-stage task</strong>:
+      </p>
+      <ul class="content">
+        <li><strong>Stage 1:</strong> Represents the nominal condition where no safety conflict exists.</li>
+        <li><strong>Stage 2:</strong> Introduces a safety-conflicting formation, evaluating the system's ability to maintain the leader within the perception safe set.</li>
+        <li><strong>Stage 3:</strong> Removes the safety conflict, allowing the followers to converge back to their nominal formation objectives.</li>
+      </ul>
+
+      <hr>
+      <h3 class="title is-4 has-text-centered">Python numerical simulation</h3>
+
+      <p class="content">
+        To validate our perception-aware framework, we developed a Python-based numerical simulation of a two-level leader-follower drone hierarchy tracking a dynamic Figure-8 trajectory. This simulation directly compares two parallel follower branches: one equipped with our kinematic Control Barrier Function (CBF) safety filter and a baseline branch operating without it. By driving the formation through three distinct phases&mdash;a conservative initial state, an aggressive stage that intentionally issues commands outside the Field of View (FOV) boundaries, and a final recovery phase&mdash;the results clearly demonstrate the necessity of our approach. While the baseline No-CBF drones blindly follow geometric commands and suffer complete visibility loss during the aggressive maneuvers, the CBF-equipped drones seamlessly activate their safety filters, dynamically adjusting their velocities to keep their respective leaders safely locked inside the camera frame.
+      </p>
+
+      <div class="columns is-centered is-vcentered mt-4">
+        <div class="column is-8">
+          <video autoplay controls muted loop playsinline width="100%" preload="metadata">
+            <source src="static/videos/cbf_two_level.mp4" type="video/mp4">
+          </video>
+          <p class="figure-caption"><em>Python numerical simulation of the two-level setup through Stage 1 &rarr; Stage 2 (no recovery). The CBF pair (filter on) keeps the leader within the perception safe set; the NoCBF pair does not.</em></p>
+        </div>
+      </div>
+
+      <hr>
+      <h3 class="title is-4 has-text-centered">Gazebo Simulation</h3>
+      <div class="columns is-centered is-vcentered mt-4">
+        <div class="column is-half">
+          <img src="static/images/scenario.png" alt="Top view of the cave navigation scenario" loading="lazy" />
+          <p class="figure-caption"><em>One leader (green) and two followers navigating a confined cave environment in Gazebo.</em></p>
+        </div>
+      </div>
+
+      <p class="content">
+        Utilizing the <a href="https://www.bitcraze.io/2024/04/crazysim-a-software-in-the-loop-simulator-for-the-crazyflie/" target="_blank" rel="noopener noreferrer">CrazySim</a> framework, the multi-UAV team navigates a confined cave environment, simulating a GPS-denied setting that requires strict vision-based coordination. The terrain is designed to naturally trigger the test scenario: an open chamber allows the team to expand their nominal formation, introducing the safety-conflicting formation evaluated in Stage 2.
+      </p>
+
+      <div class="columns is-centered is-vcentered mt-4">
+        <div class="column is-8">
+          <video autoplay controls muted loop playsinline width="100%" preload="metadata">
+            <source src="static/videos/Simulation-compressed-low.mp4" type="video/mp4">
+          </video>
+          <p class="figure-caption"><em>Gazebo simulation of the three-stage task.</em></p>
+        </div>
+
+        <div class="column is-4">
+          <img src="static/images/crazysim_conflicting.png" alt="Gazebo Simulation Quantitative Results" loading="lazy" style="max-width: 100%; margin: 0 auto; display: block;" />
+          <p class="figure-caption"><em>Quantitative results: the CBF-equipped follower (blue) maintains its 3D-LFF states within the perception safe region throughout the conflict, whereas the NoCBF baseline (red) violates the FOV constraints.</em></p>
+        </div>
+      </div>
+
+      <p class="content mt-4">
+        During Stage 2, the formation expansion introduces a conflict between formation and perception safety objectives. The proposed CBF-QP framework dynamically prioritizes safety, intervening to ensure the leader remains strictly within the perception safe set. The NoCBF baseline fails to adapt, resulting in severe safety violations. In Stage 3, the conflict is removed, and both followers are able to converge to their nominal formation objectives.
+      </p>
+
+      <hr>
+      <h3 class="title is-4 has-text-centered">Crazyflie Hardware Experiment</h3>
+
+      <div class="columns is-centered is-vcentered mt-4">
+        <div class="column is-half">
+          <img src="static/images/topview.png" alt="Top view of the hardware experiment trajectory" loading="lazy" />
+          <p class="figure-caption"><em>Top-down view of the leader and follower trajectories during real flight.</em></p>
+        </div>
+      </div>
+
+      <p class="content mt-4">
+        The hardware experiments validate the proposed framework under real-world flight conditions on <strong>Crazyflie 2.1</strong> quadrotors, capturing the effects of unmodeled aerodynamic drag, communication latency, and actuator noise. To rigorously stress-test the proposed method, the leader is commanded to track a yaw-modulated lemniscate trajectory. A motion-capture system provides global poses to emulate ideal relative measurements and isolate the contribution of the control and safety filter layers.
+      </p>
+
+      <div class="columns is-centered is-vcentered mt-4">
+        <div class="column is-8">
+          <video autoplay controls muted loop playsinline width="100%" preload="metadata">
+            <source src="static/videos/Experiment-compressed-low.mp4" type="video/mp4">
+          </video>
+          <p class="figure-caption"><em>Hardware flight video.</em></p>
+        </div>
+
+        <div class="column is-4">
+          <img src="static/images/exp_shorten.png" alt="Hardware Experiment Quantitative Results" loading="lazy" style="max-width: 100%; margin: 0 auto; display: block;" />
+          <p class="figure-caption"><em>Quantitative results: the CBF follower (blue) stays inside the safe region; the baseline (red) does not.</em></p>
+        </div>
+      </div>
+
+      <p class="content mt-4">
+        In Stage 2, formation expansion drives the desired elevation angle into the unsafe region, causing the NoCBF baseline to violate safety constraints. Conversely, the proposed framework safely resolves this conflict by computing a minimally modified safe control input, strictly bounding the state within the perception safe region while sustaining accurate tracking of unconstrained states. Finally, in Stage 3, the safety conflict is removed, and both followers converge to their formation objectives.
       </p>
     </div>
-  </div>
-</footer>
+  </section>
 
+  <!-- Conclusion -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 has-text-centered">Conclusion</h2>
+          <div class="columns is-centered mt-4">
+            <div class="column is-5">
+              <div class="box has-text-centered" style="height: 100%;">
+                <span class="icon is-large has-text-success">
+                  <i class="fas fa-eye fa-2x"></i>
+                </span>
+                <h4 class="title is-5 mt-3">Visibility is Guaranteed</h4>
+                <p class="is-size-6">
+                  The CBF-QP safety filter enforces perception safety, ensuring that the leader remains within the follower's camera frustum at all times.
+                </p>
+              </div>
+            </div>
+            <div class="column is-5">
+              <div class="box has-text-centered" style="height: 100%;">
+                <span class="icon is-large has-text-success">
+                  <i class="fas fa-crosshairs fa-2x"></i>
+                </span>
+                <h4 class="title is-5 mt-3">Tracking is Preserved</h4>
+                <p class="is-size-6">
+                  When visibility constraints are inactive, the nominal controller achieves stable formation tracking and convergence to the desired 3D-LFF reference.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize all div with class .carousel
-      const carousels = bulmaCarousel.attach('#gazebo-carousel', {
-        slidesToScroll: 1,
-        slidesToShow: 1,
-        infinite: false,
-        autoplay: false,
-        pagination: true, // You can set this to true if you want dots at the bottom
-      });
-    });
-  </script>
-</body>
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{santjoko2026perceptionaware3dlff,
+  author  = {Santjoko, Immanuel R. and Suganda, Richie R. and Pan, Miao and Hu, Bin},
+  title   = {Distributed 3D Leader--Follower Formation Control with
+             Field-of-View Safety via Control Barrier Functions},
+  journal = {Under Review},
+  year    = {2026},
+}</code></pre>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>
+              Website template adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener noreferrer">Academic Project Page Template</a>, which itself is adapted from the <a href="https://nerfies.github.io" target="_blank" rel="noopener noreferrer">Nerfies</a> project page. Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

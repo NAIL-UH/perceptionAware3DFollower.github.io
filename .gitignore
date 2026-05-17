@@ -1,2 +1,102 @@
-.DS_store
-.idea
+# =========================================================
+# Project assets that should NOT be published
+# =========================================================
+
+# Source paper, LaTeX zip, and other reference material
+references/
+*.pdf
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# LaTeX build artifacts (in case any sneak in)
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+
+# =========================================================
+# Secrets — never commit these
+# =========================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.crt
+*.htpasswd
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+id_dsa
+id_dsa.*
+*.pgp
+*.gpg
+secrets.*
+credentials.*
+config.local.*
+
+# =========================================================
+# Editor / IDE
+# =========================================================
+.claude/
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+.AppleDouble
+.LSOverride
+.Trashes
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+
+# =========================================================
+# Windows / OneDrive
+# =========================================================
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# =========================================================
+# Node / build output (in case you add tooling later)
+# =========================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+build/
+.cache/
+
+# =========================================================
+# Misc
+# =========================================================
+*.bak
+*.tmp
+*.temp
+*.orig
+*~
